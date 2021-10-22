@@ -6,6 +6,7 @@
 
 struct Node {
     std::vector<int> puzzle;
+    std::string path = ""; 
 
     int size = -1;
     int blankIndex = -1;
@@ -25,6 +26,7 @@ struct Node {
                 std::cout << std::endl;
             }
         }
+        std::cout << path << std::endl;
     }
 
     bool goalTest() const {
@@ -51,6 +53,7 @@ struct Node {
             newPuzzle.at(blankIndex - 1) = 0;
 
             Node* newNode = new Node(newPuzzle);
+            newNode->path += this->path + 'L';
             return newNode;
         }
         
@@ -67,6 +70,7 @@ struct Node {
             newPuzzle.at(blankIndex + 1) = 0;
 
             Node* newNode = new Node(newPuzzle);
+            newNode->path += this->path + 'R';
             return newNode;
         }
     }
@@ -82,6 +86,7 @@ struct Node {
             newPuzzle.at(blankIndex - size) = 0;
 
             Node* newNode = new Node(newPuzzle);
+            newNode->path += this->path + 'U';
             return newNode;
         }
     }
@@ -97,6 +102,7 @@ struct Node {
             newPuzzle.at(blankIndex + size) = 0;
 
             Node* newNode = new Node(newPuzzle);
+            newNode->path += this->path + 'D';
             return newNode;
         }
     }
@@ -146,7 +152,7 @@ Node* uniformCostSearch(Node* problem, int heuristic) {
 }
 
 int main() {
-    std::vector<int> test = {7, 1, 2, 4, 8, 5, 6, 3, 0};
+    std::vector<int> test = {1, 2, 3, 5, 0, 6, 4, 7, 8};
     Node* n = new Node(test);
     n->print();  
     std::cout << std::endl;
