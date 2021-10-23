@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <stack>
 #include <math.h>
 // use std::
 
@@ -19,14 +20,87 @@ struct Node {
         }
     }
     
-    void print() const {
+    // Returns visual representation of the node
+    std::string getTextNode() const {
+        std::string textNode = "";
         for (unsigned i = 0; i < puzzle.size(); i++) {
-            std::cout << puzzle.at(i) << ' ';
+            textNode += std::to_string(puzzle.at(i)) + ' ';
             if ((i + 1) % size == 0) {
-                std::cout << std::endl;
+                textNode += '\n';
             }
         }
-        std::cout << path << std::endl;
+
+        return textNode;
+    }
+
+    void printNode() const {
+        std::string textNode = getTextNode();
+        std::cout << textNode;
+    }
+
+    void printPath() const {
+        // Find the path that contains reverse of each move
+        std::string matchedPath = "";
+        for (unsigned i = 0; i < path.size(); i++) {
+            if (path.at(i) == 'L') {
+                matchedPath += 'R';
+            }
+            else if (path.at(i) == 'R') {
+                matchedPath += 'L';
+            }
+            else if (path.at(i) == 'U') {
+                matchedPath += 'D';
+            }
+            else if (path.at(i) == 'D') {
+                matchedPath += 'U';
+            }
+            else { // Error case
+                return;
+            }
+        }
+
+        std::string textPath = ""; // string - contains the visual representation of the path
+        std::stack<Node*> nodesPath; // queue - contains the Nodes of the path 
+
+        // FIXME: How do I push 'this' pointer to my queue?
+        // nodesPath.push(this);
+
+        // Add current node as the first item in stack
+        Node* newNode = nullptr;
+        newNode = new Node(this->puzzle);
+        nodesPath.push(newNode);
+
+        for (int i = matchedPath.size() - 1; i >= 0; i--) {
+            if (matchedPath.at(i) == 'L') {
+                newNode = nodesPath.top()->moveLeft();
+            } 
+            else if (matchedPath.at(i) == 'R') {
+                newNode = nodesPath.top()->moveRight();
+            } 
+            else if (matchedPath.at(i) == 'U') {
+                newNode = nodesPath.top()->moveUp();
+            } 
+            else if (matchedPath.at(i) == 'D') {
+                newNode = nodesPath.top()->moveDown();
+            } 
+            else {
+                break;
+            }
+
+            // Check for error
+            if (newNode == nullptr) {
+                std::cout << "error";
+                return;
+            }
+            // FIXME
+            nodesPath.push(newNode);
+        }
+        
+        while(!nodesPath.empty()) {
+            textPath += nodesPath.top()->getTextNode() + '\n';
+            nodesPath.pop();
+        }
+        std::cout << textPath;
     }
 
     bool goalTest() const {
@@ -154,15 +228,15 @@ Node* uniformCostSearch(Node* problem, int heuristic) {
 int main() {
     std::vector<int> test = {1, 2, 3, 5, 0, 6, 4, 7, 8};
     Node* n = new Node(test);
-    n->print();  
-    std::cout << std::endl;
+    // n->printNode();  
+    // std::cout << std::endl;
 
     Node* solution = uniformCostSearch(n, 0);
     if (solution == nullptr) 
         std::cout << "failure" << std::endl;
     else
-        std::cout << "solution" << std::endl;
-        solution->print();
+        std::cout << "Solution:" << std::endl;
+        solution->printPath();
         std::cout << std::endl;
 
     // Node* l = n->moveLeft();
