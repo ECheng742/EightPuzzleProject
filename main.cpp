@@ -7,9 +7,11 @@
 
 struct Node {
     std::vector<int> puzzle;
-    std::string path = ""; 
+    std::string path = "";
+    int misplacedTileHeuristic = 0;
+    int manhattanDistanceHeuristic = 0; 
 
-    int size = -1;
+    unsigned size = 0;
     int blankIndex = -1;
 
     Node(std::vector<int> puzzle) : puzzle(puzzle), size(sqrt(puzzle.size())) {
@@ -20,6 +22,25 @@ struct Node {
         }
     }
     
+    // Evaluates number of misplaced tiles in the puzzle not including blank
+    void setMisplacedTileHeuristic() {
+        for (unsigned i = 0; i < puzzle.size(); i++) {
+            if (puzzle.at(i) != 0 && puzzle.at(i) != i + 1) misplacedTileHeuristic++;
+        }
+    }
+
+    // Evaluates Manhattan distance of the puzzle not including blank
+    void setManhattanDistanceHeuristic() {
+        for (unsigned i = 0; i < puzzle.size(); i++) {
+            if (puzzle.at(i) != 0 && puzzle.at(i) != i + 1) {
+                int correctPosition = puzzle.at(i) - 1;
+                int xDistance = correctPosition % size - (i % size); // FIXME: abs - overloaded for unsigned b/c of modulo
+                int yDistance = (i / size) - (correctPosition / size);
+                manhattanDistanceHeuristic += std::abs(xDistance) + std::abs(yDistance);
+            }
+        }
+    }
+
     // Returns visual representation of the node
     std::string getTextNode() const {
         std::string textNode = "";
@@ -124,7 +145,7 @@ struct Node {
     }
 
     bool goalTest() const {
-        for (unsigned i = 0; i < puzzle.size() - 2; i++) {
+        for (unsigned i = 0; i < puzzle.size() - 1; i++) { //FIXME?
             if (puzzle.at(i) != i + 1) return false;
         }
         
@@ -246,10 +267,14 @@ Node* uniformCostSearch(Node* problem, int heuristic) {
 }
 
 int main() {
-    std::vector<int> test = {1, 2, 3, 5, 0, 6, 4, 7, 8};
+    std::vector<int> test = {1,2,3,5,0,6,4,7,8};
     Node* n = new Node(test);
     // n->printNode();  
     // std::cout << std::endl;
+    // n->setMisplacedTileHeuristic();
+    // n->setManhattanDistanceHeuristic();
+    // std::cout << n->misplacedTileHeuristic << std::endl;
+    // std::cout << n->manhattanDistanceHeuristic << std::endl;
 
     Node* solution = uniformCostSearch(n, 0);
     if (solution == nullptr) 
