@@ -38,8 +38,28 @@ struct Node {
         std::cout << textNode;
     }
 
+    void printMoves() const {
+        for (unsigned i = 0; i < path.size(); i++) {
+            if (path.at(i) == 'L') {
+                std::cout << "Left ";
+            }
+            else if (path.at(i) == 'R') {
+                std::cout << "Right ";
+            }
+            else if (path.at(i) == 'U') {
+                std::cout << "Up ";
+            }
+            else if (path.at(i) == 'D') {
+                std::cout << "Down ";
+            }
+        }
+        std::cout << std::endl;
+    }
+
     void printPath() const {
         // Find the path that contains reverse of each move
+        printMoves();
+
         std::string matchedPath = "";
         for (unsigned i = 0; i < path.size(); i++) {
             if (path.at(i) == 'L') {
@@ -92,7 +112,7 @@ struct Node {
                 std::cout << "error";
                 return;
             }
-            // FIXME
+            
             nodesPath.push(newNode);
         }
         
@@ -238,26 +258,4 @@ int main() {
         std::cout << "Solution:" << std::endl;
         solution->printPath();
         std::cout << std::endl;
-
-    // Node* l = n->moveLeft();
-    // if (l != nullptr) l->print();
-    // else std::cout << "no l";
-    // std::cout << std::endl;
-    // Node* r = n->moveRight();
-    // if (r != nullptr) r->print();
-    // else std::cout << "no r";
-    // std::cout << std::endl;
-    // Node* u = n->moveUp();
-    // if (u != nullptr) u->print();
-    // else std::cout << "no u";
-    // std::cout << std::endl;
-    // Node* d = n->moveDown();
-    // if (d != nullptr) d->print();
-    // else std::cout << "no d";
-    // std::cout << std::endl;
-    // std::cout << n.goalTest() << std::endl;
-    // std::vector<int> test2 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
-    // Node n2 = Node(test2);
-    // n2.print();
-    // std::cout << n2.goalTest() << std::endl;
 }
