@@ -103,6 +103,7 @@ struct Node {
     }
 
     void printMoves() const {
+        std::cout << "Path: ";
         for (unsigned i = 0; i < path.size(); i++) {
             if (path.at(i) == 'L') {
                 std::cout << "Left ";
@@ -117,10 +118,22 @@ struct Node {
                 std::cout << "Down ";
             }
         }
+        std::cout << "(Moves: " << path.size() << ")" << std::endl;
         std::cout << std::endl;
     }
 
+    void printSolution(std::string search) const {
+        std::cout << search << std::endl;
+        printPath();
+    }
+
     void printPath() const {
+        // Check if solution is valid
+        if (this == nullptr) {
+            std::cout << "Failure" << std::endl;
+            return;
+        }
+
         // Find the path that contains reverse of each move
         printMoves();
 
