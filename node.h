@@ -9,6 +9,7 @@
 
 struct Node {
     std::vector<int> puzzle;
+    std::string puzzleString = "";
     std::string path = "";
     int misplacedTileHeuristic = 0;
     int manhattanDistanceHeuristic = 0; 
@@ -22,6 +23,7 @@ struct Node {
             if (puzzle.at(i) == 0) {
                 blankIndex = i;
             }
+            puzzleString += std::to_string(puzzle.at(i));
         }
     }
     
@@ -30,6 +32,7 @@ struct Node {
             if (puzzle.at(i) == 0) {
                 blankIndex = i;
             }
+            puzzleString += std::to_string(puzzle.at(i));
         }
     }
 
@@ -128,12 +131,6 @@ struct Node {
     }
 
     void printPath() const {
-        // Check if solution is valid
-        if (this == nullptr) {
-            std::cout << "Failure" << std::endl;
-            return;
-        }
-
         // Find the path that contains reverse of each move
         printMoves();
 

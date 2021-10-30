@@ -3,6 +3,7 @@
 #include <queue>
 #include <stack>
 #include <math.h>
+#include <unordered_set>
 
 #include "node.h"
 #include "comparator.h"
@@ -18,18 +19,21 @@ std::vector<Node*> expand(Node* node) {
     return children;
 }
 
-void queueingFunction(std::queue<Node*> &nodes, std::vector<Node*> expandedNodes) {
+void queueingFunction(std::queue<Node*> &nodes, std::unordered_set<std::string> &duplicates, std::vector<Node*> expandedNodes) {
     for (unsigned i = 0; i < expandedNodes.size(); i++) {
-        if (expandedNodes.at(i) != nullptr) {
+        if (expandedNodes.at(i) != nullptr && duplicates.find(expandedNodes.at(i)->puzzleString) == duplicates.end()) {
             nodes.push(expandedNodes.at(i));
+            duplicates.insert(expandedNodes.at(i)->puzzleString);
         }
     }
 }
 
-void priorityQueueingFunction(std::priority_queue<Node*, std::vector<Node*>, Comparator> &nodes, std::vector<Node*> expandedNodes) {
+// Queueing function based on g(n) + h(n) for A Star searches
+void priorityQueueingFunction(std::priority_queue<Node*, std::vector<Node*>, Comparator> &nodes, std::unordered_set<std::string> &duplicates, std::vector<Node*> expandedNodes) {
     for (unsigned i = 0; i < expandedNodes.size(); i++) {
-        if (expandedNodes.at(i) != nullptr) {
+        if (expandedNodes.at(i) != nullptr && duplicates.find(expandedNodes.at(i)->puzzleString) == duplicates.end()) {
             nodes.push(expandedNodes.at(i));
+            duplicates.insert(expandedNodes.at(i)->puzzleString);
         }
     }
 }
@@ -38,6 +42,8 @@ Node* uniformCostSearch(Node* problem, int heuristic) {
     // do i need to free pointers?
     std::queue<Node*> nodes;
     nodes.push(problem);
+    std::unordered_set<std::string> duplicates;
+    duplicates.insert(problem->puzzleString);
 
     while (!nodes.empty()) {
         Node* node = nodes.front();
@@ -48,10 +54,11 @@ Node* uniformCostSearch(Node* problem, int heuristic) {
             return node;
         }
 
-        queueingFunction(nodes, expand(node));
+        queueingFunction(nodes, duplicates, expand(node));
     }
 
     Node* failure = nullptr;
+    std::cout << "Uniform Cost Search\nFailure - unsolvable game\n";
     return failure;
 }
 
@@ -62,20 +69,23 @@ Node* misplacedTileAStarSearch(Node* problem, int misplacedTileHeuristic) {
     problem->heuristicChoice = 1;
     problem->setMisplacedTileHeuristic();
     nodes.push(problem);
+    std::unordered_set<std::string> duplicates;
+    duplicates.insert(problem->puzzleString);
 
     while (!nodes.empty()) {
         Node* node = nodes.top();
         nodes.pop();
 
         if (node->goalTest()) {
-            node->printSolution("A* Search with the Manhattan Distance heuristic");
+            node->printSolution("A* Search with the Misplaced tile heuristic");
             return node;
         }
 
-        priorityQueueingFunction(nodes, expand(node));
+        priorityQueueingFunction(nodes, duplicates, expand(node));
     }
 
     Node* failure = nullptr;
+    std::cout << "A* Search with the Misplaced Tile heuristic\nFailure - unsolvable game\n";
     return failure;
 }
 
@@ -86,20 +96,23 @@ Node* manhattanDistanceAStarSearch(Node* problem, int manhattanDistanceHeuristic
     problem->heuristicChoice = 2;
     problem->setManhattanDistanceHeuristic();
     nodes.push(problem);
+    std::unordered_set<std::string> duplicates;
+    duplicates.insert(problem->puzzleString);
 
     while (!nodes.empty()) {
         Node* node = nodes.top();
         nodes.pop();
 
         if (node->goalTest()) {
-            node->printSolution("A* Search with the Misplaced Tile heuristic");
+            node->printSolution("A* Search with the Manhattan Distance heuristic");
             return node;
         }
 
-        priorityQueueingFunction(nodes, expand(node));
+        priorityQueueingFunction(nodes, duplicates, expand(node));
     }
 
     Node* failure = nullptr;
+    std::cout << "A* Search with the Manhattan Distance heuristic\nFailure - unsolvable game\n";
     return failure;
 }
 
@@ -108,7 +121,7 @@ int main() {
     // std::vector<int> start = {1, 2, 3, 4, 5, 6, 7, 8, 0};
 
     // Depth 2
-    std::vector<int> start = {1, 2, 3, 4, 5, 6, 0, 7, 8};
+    // std::vector<int> start = {1, 2, 3, 4, 5, 6, 0, 7, 8};
 
     // Depth 4
     // std::vector<int> start = {1, 2, 3, 5, 0, 6, 4, 7, 8};
@@ -128,41 +141,15 @@ int main() {
     // Depth 24   
     // std::vector<int> start = {0, 7, 2, 4, 6, 1, 3, 5, 8};
 
+    // Failure
+    std::vector<int> start = {1, 2, 3, 4, 5, 6, 8, 7, 0};
+
     Node* puzzle = new Node(start);
     
-    // Node* solution = uniformCostSearch(puzzle, 0);
+    Node* solution = uniformCostSearch(puzzle, 0);
     // Node* solution = misplacedTileAStarSearch(puzzle, 1);
-    Node* solution = manhattanDistanceAStarSearch(puzzle, 2);
+    // Node* solution = manhattanDistanceAStarSearch(puzzle, 2);
+
     //FIXME: comment code
-
-    // Node* solution = uniformCostSearch(n, 0);
-    // if (solution == nullptr) 
-    //     std::cout << "failure" << std::endl;
-    // else {
-    //     std::cout << "Solution:" << std::endl;
-    //     solution->printPath();
-    //     std::cout << std::endl;
-    // }
-
-    // n->heuristicChoice = 1;
-    // n->setMisplacedTileHeuristic();
-    // Node* solution2 = misplacedTileAStarSearch(n, 1);
-    // if (solution2 == nullptr) 
-    //     std::cout << "failure" << std::endl;
-    // else {
-    //     std::cout << "Solution:" << std::endl;
-    //     solution2->printPath();
-    //     std::cout << std::endl;
-    // }
-
-    // n->heuristicChoice = 2;
-    // n->setManhattanDistanceHeuristic();
-    // Node* solution3 = manhattanDistanceAStarSearch(n, 1);
-    // if (solution3 == nullptr) 
-    //     std::cout << "failure" << std::endl;
-    // else {
-    //     std::cout << "Solution:" << std::endl;
-    //     solution3->printPath();
-    //     std::cout << std::endl;
-    // }
+    // FIXME: test nullptr solution
 }
