@@ -1,14 +1,14 @@
 #include <iostream>
-#include <vector>
-#include <queue>
-#include <stack>
-#include <math.h>
-#include <unordered_set>
+#include <vector> // Source: https://www.cplusplus.com/reference/vector/vector/
+#include <queue> // Source: https://www.cplusplus.com/reference/queue/queue/
+#include <stack> // Source: https://www.cplusplus.com/reference/stack/stack/
+#include <math.h> // Source: https://www.cplusplus.com/reference/cmath/
+#include <unordered_set> // Source: https://www.cplusplus.com/reference/unordered_set/unordered_set/
 
 #include "node.h"
 #include "comparator.h"
-// use std::
 
+// Expand current state to its children
 std::vector<Node*> expand(Node* node) {
     std::vector<Node*> children;
     children.push_back(node->moveLeft());
@@ -19,6 +19,7 @@ std::vector<Node*> expand(Node* node) {
     return children;
 }
 
+// Queueing function based on g(n) for Uniform cost search
 void queueingFunction(std::queue<Node*> &nodes, std::unordered_set<std::string> &duplicates, std::vector<Node*> expandedNodes) {
     for (unsigned i = 0; i < expandedNodes.size(); i++) {
         if (expandedNodes.at(i) != nullptr && duplicates.find(expandedNodes.at(i)->puzzleString) == duplicates.end()) {
@@ -141,6 +142,12 @@ int main() {
     // Depth 24   
     // std::vector<int> start = {0, 7, 2, 4, 6, 1, 3, 5, 8};
 
+    // Depth 31
+    // std::vector<int> start = {8, 6, 7, 2, 5, 4, 3, 0, 1};
+
+    // Depth 31
+    // std::vector<int> start = {6, 4, 7, 8, 5, 0, 3, 2, 1};
+
     // Failure
     std::vector<int> start = {1, 2, 3, 4, 5, 6, 8, 7, 0};
 
@@ -149,7 +156,4 @@ int main() {
     Node* solution = uniformCostSearch(puzzle, 0);
     // Node* solution = misplacedTileAStarSearch(puzzle, 1);
     // Node* solution = manhattanDistanceAStarSearch(puzzle, 2);
-
-    //FIXME: comment code
-    // FIXME: test nullptr solution
 }

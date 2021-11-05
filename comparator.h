@@ -2,34 +2,28 @@
 #define __COMPARATOR_H__
 
 #include <iostream>
-#include <vector>
-#include <queue>
-#include <stack>
-#include <math.h>
+#include <vector> // Source: https://www.cplusplus.com/reference/vector/vector/
+#include <queue> // Source: https://www.cplusplus.com/reference/queue/queue/
+#include <stack> // Source: https://www.cplusplus.com/reference/stack/stack/
+#include <math.h> // Source: https://www.cplusplus.com/reference/cmath/
 
 #include "node.h"
 
+// Comparator that compares Nodes using g(n) + h(n)
 struct Comparator {
-    // Comparator();
+    // Source: https://stackoverflow.com/questions/13790276/operator-overload-or-comparison-function-in-c-priority-queue
+    // Overload operator() to be able to compare 2 nodes based on A* algorithm
     bool operator() (const Node* lhs, const Node* rhs) const
     {
-        // lhs->printNode();
-        // std::cout << "l" << std::endl;
-        // rhs->printNode();
-        // std::cout << "r" << std::endl;
         // Misplaced Tile Heuristic + Current Cost
         if (lhs->heuristicChoice == 1 && (lhs->misplacedTileHeuristic + lhs->path.size() > rhs->misplacedTileHeuristic + rhs->path.size())) {
-            // std::cout << lhs->misplacedTileHeuristic << " " << lhs->path.size() << " " << rhs->misplacedTileHeuristic << " " << rhs->path.size() << std::endl;
-            // std::cout << "0" << std::endl;
             return true;
         }
         // Manhattan Distance Heuristic + Current Cost
         else if (lhs->heuristicChoice == 2 && (lhs->manhattanDistanceHeuristic + lhs->path.size() > rhs->manhattanDistanceHeuristic + rhs->path.size())) {
-            // std::cout << "1" << std::endl;
             return true;
         }
         else {
-            // std::cout << "2" << std::endl;
             return false;
         }
     }
