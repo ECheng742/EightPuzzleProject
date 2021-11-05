@@ -45,17 +45,23 @@ Node* uniformCostSearch(Node* problem, int heuristic) {
     nodes.push(problem);
     std::unordered_set<std::string> duplicates;
     duplicates.insert(problem->puzzleString);
+    int maxQueueSize = 1;
+    int expandedNodes = 0;
 
     while (!nodes.empty()) {
         Node* node = nodes.front();
         nodes.pop();
+        expandedNodes++;
 
         if (node->goalTest()) {
-            node->printSolution("Uniform Cost Search");
+            node->printSolution("Uniform Cost Search", maxQueueSize, expandedNodes);
             return node;
         }
 
         queueingFunction(nodes, duplicates, expand(node));
+        if (nodes.size() > maxQueueSize) {
+            maxQueueSize = nodes.size();
+        }
     }
 
     Node* failure = nullptr;
@@ -72,17 +78,23 @@ Node* misplacedTileAStarSearch(Node* problem, int misplacedTileHeuristic) {
     nodes.push(problem);
     std::unordered_set<std::string> duplicates;
     duplicates.insert(problem->puzzleString);
+    int maxQueueSize = 1;
+    int expandedNodes = 0;
 
     while (!nodes.empty()) {
         Node* node = nodes.top();
         nodes.pop();
+        expandedNodes++;
 
         if (node->goalTest()) {
-            node->printSolution("A* Search with the Misplaced tile heuristic");
+            node->printSolution("A* Search with the Misplaced tile heuristic", maxQueueSize, expandedNodes);
             return node;
         }
 
         priorityQueueingFunction(nodes, duplicates, expand(node));
+        if (nodes.size() > maxQueueSize) {
+            maxQueueSize = nodes.size();
+        }
     }
 
     Node* failure = nullptr;
@@ -99,17 +111,23 @@ Node* manhattanDistanceAStarSearch(Node* problem, int manhattanDistanceHeuristic
     nodes.push(problem);
     std::unordered_set<std::string> duplicates;
     duplicates.insert(problem->puzzleString);
+    int maxQueueSize = 1;
+    int expandedNodes = 0;
 
     while (!nodes.empty()) {
         Node* node = nodes.top();
         nodes.pop();
+        expandedNodes++;
 
         if (node->goalTest()) {
-            node->printSolution("A* Search with the Manhattan Distance heuristic");
+            node->printSolution("A* Search with the Manhattan Distance heuristic", maxQueueSize, expandedNodes);
             return node;
         }
 
         priorityQueueingFunction(nodes, duplicates, expand(node));
+        if (nodes.size() > maxQueueSize) {
+            maxQueueSize = nodes.size();
+        }
     }
 
     Node* failure = nullptr;
@@ -143,13 +161,13 @@ int main() {
     // std::vector<int> start = {0, 7, 2, 4, 6, 1, 3, 5, 8};
 
     // Depth 31
-    // std::vector<int> start = {8, 6, 7, 2, 5, 4, 3, 0, 1};
+    std::vector<int> start = {8, 6, 7, 2, 5, 4, 3, 0, 1};
 
     // Depth 31
     // std::vector<int> start = {6, 4, 7, 8, 5, 0, 3, 2, 1};
 
     // Failure
-    std::vector<int> start = {1, 2, 3, 4, 5, 6, 8, 7, 0};
+    // std::vector<int> start = {1, 2, 3, 4, 5, 6, 8, 7, 0};
 
     Node* puzzle = new Node(start);
     

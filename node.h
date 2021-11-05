@@ -98,8 +98,11 @@ struct Node {
     }
 
     // Prints solution of the puzzle up to the current state
-    void printSolution(std::string search) const {
+    void printSolution(std::string search, int maxQueueSize, int expandedNodes) const {
         std::cout << search << std::endl;
+        std::cout << "Solution Depth: " << path.size() << std::endl;
+        std::cout << "Max Queue Size: " << maxQueueSize << std::endl;
+        std::cout << "Nodes Expanded: " << expandedNodes << std::endl;
         printPath();
     }
 
