@@ -50,7 +50,7 @@ struct Node {
         for (unsigned i = 0; i < puzzle.size(); i++) {
             if (puzzle.at(i) != 0 && puzzle.at(i) != i + 1) {
                 int correctPosition = puzzle.at(i) - 1;
-                int xDistance = correctPosition % size - (i % size); // FIXME: abs - overloaded for unsigned b/c of modulo
+                int xDistance = correctPosition % size - (i % size);
                 int yDistance = (i / size) - (correctPosition / size);
                 manhattanDistanceHeuristic += std::abs(xDistance) + std::abs(yDistance);
             }
@@ -133,9 +133,6 @@ struct Node {
         std::string textPath = ""; // string - contains the visual representation of the path
         std::stack<Node*> nodesPath; // queue - contains the Nodes of the path 
 
-        // FIXME: How do I push 'this' pointer to my queue?
-        // nodesPath.push(this);
-
         // Add current node as the first item in stack
         Node* newNode = nullptr;
         newNode = new Node(this->puzzle);
@@ -176,7 +173,7 @@ struct Node {
 
     // Checks if current state is goal state
     bool goalTest() const {
-        for (unsigned i = 0; i < puzzle.size() - 1; i++) { //FIXME?
+        for (unsigned i = 0; i < puzzle.size() - 1; i++) { 
             if (puzzle.at(i) != i + 1) return false;
         }
         

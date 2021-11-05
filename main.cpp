@@ -39,8 +39,8 @@ void priorityQueueingFunction(std::priority_queue<Node*, std::vector<Node*>, Com
     }
 }
 
-Node* uniformCostSearch(Node* problem, int heuristic) {
-    // do i need to free pointers?
+Node* uniformCostSearch(Node* problem) {
+    // fixme: do i need to free pointers?
     std::queue<Node*> nodes;
     nodes.push(problem);
     std::unordered_set<std::string> duplicates;
@@ -69,8 +69,7 @@ Node* uniformCostSearch(Node* problem, int heuristic) {
     return failure;
 }
 
-//FIXME: don't use parameter
-Node* misplacedTileAStarSearch(Node* problem, int misplacedTileHeuristic) {
+Node* misplacedTileAStarSearch(Node* problem) {
     // do i need to free pointers?
     std::priority_queue<Node*, std::vector<Node*>, Comparator> nodes;
     problem->heuristicChoice = 1;
@@ -102,9 +101,8 @@ Node* misplacedTileAStarSearch(Node* problem, int misplacedTileHeuristic) {
     return failure;
 }
 
-//FIXME: don't use parameter
-Node* manhattanDistanceAStarSearch(Node* problem, int manhattanDistanceHeuristic) {
-    // do i need to free pointers?
+Node* manhattanDistanceAStarSearch(Node* problem) {
+    // fixme: do i need to free pointers?
     std::priority_queue<Node*, std::vector<Node*>, Comparator> nodes;
     problem->heuristicChoice = 2;
     problem->setManhattanDistanceHeuristic();
@@ -171,7 +169,7 @@ int main() {
 
     Node* puzzle = new Node(start);
     
-    Node* solution = uniformCostSearch(puzzle, 0);
-    // Node* solution = misplacedTileAStarSearch(puzzle, 1);
-    // Node* solution = manhattanDistanceAStarSearch(puzzle, 2);
+    Node* solution = uniformCostSearch(puzzle);
+    // Node* solution = misplacedTileAStarSearch(puzzle);
+    // Node* solution = manhattanDistanceAStarSearch(puzzle);
 }
