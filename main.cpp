@@ -159,7 +159,7 @@ int main() {
     // std::vector<int> start = {0, 7, 2, 4, 6, 1, 3, 5, 8};
 
     // Depth 31
-    std::vector<int> start = {8, 6, 7, 2, 5, 4, 3, 0, 1};
+    // std::vector<int> start = {8, 6, 7, 2, 5, 4, 3, 0, 1};
 
     // Depth 31
     // std::vector<int> start = {6, 4, 7, 8, 5, 0, 3, 2, 1};
@@ -167,9 +167,34 @@ int main() {
     // Failure
     // std::vector<int> start = {1, 2, 3, 4, 5, 6, 8, 7, 0};
 
+    std::vector<int> start;
+
+    std::cout << "Input: ";
+    int num = 0;
+    for (int i = 0; i < 9; i++) {
+        std::cin >> num;
+        start.push_back(num);
+    }
+
     Node* puzzle = new Node(start);
+    std::cout << std::endl;
+
+    std::cout << "Search Algorithm: ";
+    std::string search = "";
+    getline(std::cin, search); // Disregard newline
+    getline(std::cin, search);
+    std::cout << "------------------------------------------" << std::endl << std::endl;
     
-    Node* solution = uniformCostSearch(puzzle);
-    // Node* solution = misplacedTileAStarSearch(puzzle);
-    // Node* solution = manhattanDistanceAStarSearch(puzzle);
+    if (search == "Uniform Cost") {
+        Node* uniformCostSolution = uniformCostSearch(puzzle);
+    }
+    else if (search == "Misplaced Tile A*") {
+        Node* misplacedTileSolution = misplacedTileAStarSearch(puzzle);
+    }
+    else if (search == "Manhattan Distance A*") {
+        Node* manhattanDistancesolution = manhattanDistanceAStarSearch(puzzle);
+    }
+    else {
+        std::cout << "Unrecognized search algorithm" << std::endl;
+    }
 }
