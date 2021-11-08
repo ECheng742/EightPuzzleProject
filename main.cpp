@@ -69,7 +69,6 @@ Node* uniformCostSearch(Node* problem) {
 }
 
 Node* misplacedTileAStarSearch(Node* problem) {
-    // do i need to free pointers?
     std::priority_queue<Node*, std::vector<Node*>, Comparator> nodes;
     problem->heuristicChoice = 1;
     problem->setMisplacedTileHeuristic();
