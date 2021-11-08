@@ -40,7 +40,6 @@ void priorityQueueingFunction(std::priority_queue<Node*, std::vector<Node*>, Com
 }
 
 Node* uniformCostSearch(Node* problem) {
-    // fixme: do i need to free pointers?
     std::queue<Node*> nodes;
     nodes.push(problem);
     std::unordered_set<std::string> duplicates;
@@ -102,7 +101,6 @@ Node* misplacedTileAStarSearch(Node* problem) {
 }
 
 Node* manhattanDistanceAStarSearch(Node* problem) {
-    // fixme: do i need to free pointers?
     std::priority_queue<Node*, std::vector<Node*>, Comparator> nodes;
     problem->heuristicChoice = 2;
     problem->setManhattanDistanceHeuristic();
@@ -169,9 +167,14 @@ int main() {
 
     std::vector<int> start;
 
-    std::cout << "Input: ";
+    std::cout << "Enter Puzzle Size using 0 as Blank (Example - 8-puzzle is size 8): ";
+    int size;
+    std::cin >> size;
+    std::cout << std::endl;
+
+    std::cout << "Enter puzzle: ";
     int num = 0;
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < size + 1; i++) {
         std::cin >> num;
         start.push_back(num);
     }
@@ -179,7 +182,7 @@ int main() {
     Node* puzzle = new Node(start);
     std::cout << std::endl;
 
-    std::cout << "Search Algorithm: ";
+    std::cout << "Enter Search Algorithm (Example - Uniform Cost, Misplaced Tile A*, Manhattan Distance A*): ";
     std::string search = "";
     getline(std::cin, search); // Disregard newline
     getline(std::cin, search);
